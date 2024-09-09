@@ -1,0 +1,45 @@
+import requests
+
+# Function to fetch weather data using OpenWeatherMap API
+def get_weather(api_key, location):
+    base_url = "https://https://openweathermap.org.in"
+
+    params = {
+        'q': location,  # Location (city name or ZIP code)
+        'appid': api_key,  # API key
+        'units': 'metric'  # Units in Celsius, you can also use 'imperial' for Fahrenheit
+    }
+    
+    # Make a request to the OpenWeatherMap API
+    response = requests.get(base_url, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        
+        # Extract useful data
+        city = data['name']
+        temp = data['main']['temp']
+        humidity = data['main']['humidity']
+        weather_desc = data['weather'][0]['description']
+        wind_speed = data['wind']['speed']
+        
+        # Display weather information
+        print(f"Weather in {city}:")
+        print(f"Temperature: {temp}°C")
+        print(f"Humidity: {humidity}%")
+        print(f"Weather Condition: {weather_desc.capitalize()}")
+        print(f"Wind Speed: {wind_speed} m/s")
+        
+    elif response.status_code == 404:
+        print("Location not found. Please check the spelling or enter a valid city/ZIP code.")
+    else:
+        print(f"An error occurred: {response.status_code}")
+
+# Main function
+def main():
+    api_key = "8beef3cb1702a0e967b058cc4eb7a0d2"  # Replace with your actual OpenWeatherMap API key
+    location = input("Enter city name or ZIP code: ")
+    get_weather(api_key, location)
+
+if __name__ == "__main__":
+    main()
